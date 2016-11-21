@@ -1,0 +1,17 @@
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\SRYelpAPI.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\SRYelpAPI.pdb
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Microsoft.Owin.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Microsoft.Owin.Security.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Microsoft.Owin.Security.OAuth.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Newtonsoft.Json.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Owin.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\SimpleOAuth.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Microsoft.Owin.xml
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Microsoft.Owin.Security.xml
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Microsoft.Owin.Security.OAuth.xml
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\Newtonsoft.Json.xml
+D:\TFS_shiftreports\Solution1\SRYelpAPI\obj\Debug\SRYelpAPI.csprojResolveAssemblyReference.cache
+D:\TFS_shiftreports\Solution1\SRYelpAPI\obj\Debug\SRYelpAPI.dll
+D:\TFS_shiftreports\Solution1\SRYelpAPI\obj\Debug\SRYelpAPI.pdb
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\SimpleOAuth.pdb
+D:\TFS_shiftreports\Solution1\SRYelpAPI\bin\Debug\SimpleOAuth.xml
