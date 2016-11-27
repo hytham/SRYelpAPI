@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,7 +21,14 @@ namespace SRYelpAPI
 		
 
 		private const string yelpendpoint = "https://api.yelp.com";
-
+		string AccessToken = System.Configuration.ConfigurationSettings.AppSettings["AccessToken"];
+		string AccessTokenSecret = System.Configuration.ConfigurationSettings.AppSettings["AccessTokenSecret"];
+		string ConsumerKey = System.Configuration.ConfigurationSettings.AppSettings["ConsumerKey"];
+		string ConsumerSecret = System.Configuration.ConfigurationSettings.AppSettings["ConsumerSecret"];
+		private string tOKEN;
+		private string tOKEN_SECRET;
+		private string cONSUMER_KEY;
+		private string cONSUMER_SECRET;
 
 
 		/// <summary>
@@ -28,101 +36,54 @@ namespace SRYelpAPI
 		/// </summary>
 		public YelpContext()
 		{
-			string AccessToken = System.Configuration.ConfigurationSettings.AppSettings["AccessToken"];
-			string AccessTokenSecret = System.Configuration.ConfigurationSettings.AppSettings["AccessTokenSecret"];
-			string ConsumerKey = System.Configuration.ConfigurationSettings.AppSettings["ConsumerKey"];
-			string ConsumerSecret = System.Configuration.ConfigurationSettings.AppSettings["ConsumerSecret"];
 			ReqParams.Clear();
-
-			ReqParams.Add("AccessToken", AccessToken);
-			ReqParams.Add("ConsumerKey", ConsumerKey);
-			ReqParams.Add("AccessTokenSecret", AccessTokenSecret);
-			ReqParams.Add("ConsumerSecret", ConsumerSecret);
 		}
 
-		/// <summary>
-		/// This main Constructor
-		/// </summary>
-		/// <param name="AccessToken">Yelp Access token</param>
-		/// <param name="AccessTokenSecret">Yelp Access Token Secrit</param>
-		/// <param name="ConsumerKey">Yelp Customer Key</param>
-		/// <param name="ConsumerSecret">Yelp Custome Secret</param>
-		public YelpContext(string AccessToken, 
-						   string AccessTokenSecret,
-						   string ConsumerKey,
-						   string ConsumerSecret)
+		public YelpContext(string tOKEN, string tOKEN_SECRET, string cONSUMER_KEY, string cONSUMER_SECRET)
 		{
-			ReqParams.Clear();
-
-			ReqParams.Add("AccessToken", AccessToken);
-			ReqParams.Add("ConsumerKey", ConsumerKey);
-			ReqParams.Add("AccessTokenSecret", AccessTokenSecret);
-			ReqParams.Add("ConsumerSecret", ConsumerSecret);
+			this.AccessToken = tOKEN;
+			this.AccessTokenSecret = tOKEN_SECRET;
+			this.ConsumerKey = cONSUMER_KEY;
+			this.ConsumerSecret = cONSUMER_SECRET;
 		}
-
 
 		public  JObject Get(string path)
 		{
-
 			String R = "";
-			string consumerKey = ReqParams["ConsumerKey"];
-			string consumerSecret = ReqParams["ConsumerSecret"];
-			string accessToken = ReqParams["AccessToken"];
-			string accessTokenSecret = ReqParams["AccessTokenSecret"];
 
-			ReqParams.Remove("ConsumerKey");
-			ReqParams.Remove("ConsumerSecret");
-			ReqParams.Remove("AccessToken");
-			ReqParams.Remove("AccessTokenSecret");
+			var query = System.Web.HttpUtility.ParseQueryString(String.Empty);
+	
+			foreach (var queryParam in ReqParams)
+			{
+				
+					query[queryParam.Key] = queryParam.Value;
+			}
 
-			var request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(yelpendpoint+path + "?" + ConstructQueryString(ReqParams));
+			var uriBuilder = new UriBuilder(yelpendpoint + path);
+			uriBuilder.Query = query.ToString();
+
+			var request = WebRequest.Create(uriBuilder.ToString());
 			request.Method = "GET";
-
-			
-
 			request.SignRequest(
 				new Tokens
 				{
-					ConsumerKey = consumerKey,
-					ConsumerSecret = consumerSecret,
-					AccessToken = accessToken,
-					AccessTokenSecret = accessTokenSecret
+					ConsumerKey = ConsumerKey,
+					ConsumerSecret = ConsumerSecret,
+					AccessToken = AccessToken,
+					AccessTokenSecret = AccessTokenSecret
 				}
 			).WithEncryption(EncryptionMethod.HMACSHA1).InHeader();
 
-			var httpResponse = (System.Net.HttpWebResponse)request.GetResponse();
+			var httpResponse = (HttpWebResponse)request.GetResponse();
 			using (var streamReader = new System.IO.StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8))
 			{
 				var result = streamReader.ReadToEnd();
 				R = result.ToString();
 			}
 			return JObject.Parse(R);
-
 		}
 
-		/// <summary>
-		/// Construct the Query string from a Dictionary Object
-		/// </summary>
-		/// <param name="data">The Dictionary that hold the request parameters</param>
-		/// <returns></returns>
-		private String ConstructQueryString(Dictionary<string,string> data)
-		{
-
-			//Type t = data.GetType();
-			System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
-			foreach (var p in data)
-			{
-				var name = p.Key;
-				var value = p.Value;
-				if (!value.Equals("") && value != null)
-					nvc.Add(name, value.ToString());
-			}
-
-
-			string q = String.Join("&",
-			 nvc.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(nvc[a])));
-			return q;
-		}
+	
 
 		#region Yelp Paramerters
 
